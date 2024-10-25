@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trip Planner</title>
+    <link rel="stylesheet" href="./styles.css">
+
+</head>
+
+<body>
+    <header>
+        <h1 id="trip-title"></h1>
+        <button id="home-button">Go Home</button>
+        <button id="delete-trip-button">Delete Trip</button>
+    </header>
+
+    <main>
+        <div id="main">
+            <div id="left-side">
+                <section id="packing-list">
+                    <h2>Packing List</h2>
+                    <form id="packing-form">
+                        <input type="text" id="packing-input" placeholder="e.g., Passport" required>
+                        <button type="submit">Add Item</button>
+                    </form>
+                    <div id="packing-boxes"></div>
+                </section>
+
+                <section id="checklist">
+                    <h2>Checklist</h2>
+                    <form id="checklist-form">
+                        <input type="text" id="checklist-input" placeholder="e.g., Book flights" required>
+                        <button type="submit">Add Item</button>
+                    </form>
+                    <div id="checklist-boxes"></div>
+                </section>
+
+                <section id="shopping-list">
+                    <h2>Shopping List</h2>
+                    <form id="shopping-form">
+                        <input type="text" id="shopping-input" placeholder="e.g., Souvenirs" required>
+                        <button type="submit">Add Item</button>
+                    </form>
+                    <div id="shopping-boxes"></div>
+                </section>
+            </div>
+
+            <div id="right-side">
+                <section id="trip-expenses">
+                    <h2>Trip Expenses</h2>
+                    <form id="expense-form">
+                        <label for="expense-input">Enter your expense:</label>
+                        <input type="text" id="expense-input" placeholder="e.g., 2200 for flights" required>
+                        <button type="submit">Add Expense</button>
+                    </form>
+                    <div id="expense-boxes"></div>
+                    <h3>Total Expenses: $<span id="total-expenses">0</span></h3>
+                </section>
+
+                <section id="itinerary">
+                    <h2>Itinerary</h2>
+                    <form id="itinerary-form">
+                        <label for="activity-type">Type:</label>
+                        <select id="activity-type">
+                            <option value="Flight">Flight</option>
+                            <option value="Lodging">Lodging</option>
+                            <option value="Daily Activity">Daily Activity</option>
+                            <option value="Restaurant Meal">Restaurant Meal</option>
+                        </select>
+
+                        <label for="activity-name">Name:</label>
+                        <input type="text" id="activity-name" placeholder="e.g., YYZ → ICN" required>
+
+                        <label for="activity-date">Date:</label>
+                        <input type="date" id="activity-date" required>
+
+                        <label for="activity-status">Status:</label>
+                        <select id="activity-status" required>
+                            <option value="Booking">Booking</option>
+                            <option value="Planning">Planning</option>
+                            <option value="Booked">Booked</option>
+                            <option value="Completed">Completed</option>
+                        </select>
+
+                        <button type="submit">Add Activity</button>
+                    </form>
+
+                    <table id="itinerary-table" border="1">
+                        <thead>
+                            <tr>
+                                <th>Type</th>
+                                <th>Name</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="itinerary-body">
+                        </tbody>
+                    </table>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Travel Planner. All rights reserved.</p>
+    </footer>
+
+    <script src="./js/trip.js"></script>
+</body>
+
+</html>
