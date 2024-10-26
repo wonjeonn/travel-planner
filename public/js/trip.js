@@ -158,6 +158,29 @@ const saveItinerary = async (tripId) => {
     });
 };
 
+const goHome = () => {
+    window.location.href = '/';
+};
+
+const deleteTrip = async () => {
+    try {
+        const response = await fetch(`/api/trips/${tripId}`, {
+            method: 'DELETE',
+        });
+
+        if (response.ok) {
+            alert('Trip deleted successfully!');
+            goHome();
+        } else {
+            const errorResponse = await response.json();
+            alert(`Error deleting trip: ${errorResponse.message}`);
+        }
+    } catch (error) {
+        console.error('error deleting trip:', error);
+        alert('Failed to delete the trip. Please try again later.');
+    }
+};
+
 document.getElementById('packing-form').addEventListener('submit', async (e) => {
     e.preventDefault();
     const packingInput = document.getElementById('packing-input').value;
@@ -208,5 +231,9 @@ document.getElementById('itinerary-form').addEventListener('submit', async (e) =
 
     await saveItinerary(tripId);
 });
+
+document.getElementById('home-button').addEventListener('click', goHome);
+
+document.getElementById('delete-trip-button').addEventListener('click', deleteTrip);
 
 window.onload = loadTripDetails;
