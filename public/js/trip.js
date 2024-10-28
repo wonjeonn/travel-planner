@@ -29,9 +29,22 @@ const createExpenseItem = (text, amount, saveFunction) => {
     removeButton.onclick = async () => {
         expenseDiv.remove();
         await saveFunction();
+        updateTotalExpenses();
     };
     expenseDiv.appendChild(removeButton);
     return expenseDiv;
+};
+
+const updateTotalExpenses = () => {
+    const expenseItems = Array.from(document.querySelectorAll('#expense-boxes > div'));
+    let total = 0;
+    expenseItems.forEach(item => {
+        const amount = parseFloat(item.textContent.split(': $')[1]);
+        if (!isNaN(amount)) {
+            total += amount;
+        }
+    });
+    document.getElementById('total-expenses').textContent = total.toFixed(2);
 };
 
 const createItineraryRow = (type, name, date, status, saveFunction) => {
@@ -211,11 +224,23 @@ document.getElementById('shopping-form').addEventListener('submit', async (e) =>
 document.getElementById('expense-form').addEventListener('submit', async (e) => {
     e.preventDefault();
     const expenseInput = document.getElementById('expense-input').value;
-    const expenseAmount = parseFloat(expenseInput.match(/(\d+)/)[0]);
-    const expenseBox = createExpenseItem(expenseInput, expenseAmount, () => saveExpenses(tripId));
-    document.getElementById('expense-boxes').appendChild(expenseBox);
-    document.getElementById('expense-input').value = '';
-    await saveExpenses(tripId);
+
+    const match = expenseInput.match(/(\d+)(?!.*\d)/);
+    const expenseAmount = match ? parseFloat(match[0]) : 0;
+
+    if (expenseAmount > 0) {
+        const expenseBox = createExpenseItem(expenseInput, expenseAmount, async () => {
+            await saveExpenses(tripId);
+            updateTotalExpenses();
+        });
+        document.getElementById('expense-boxes').appendChild(expenseBox);
+        document.getElementById('expense-input').value = '';
+
+        await saveExpenses(tripId);
+        updateTotalExpenses();
+    } else {
+        alert("Please enter a valid expense amount.");
+    }
 });
 
 document.getElementById('itinerary-form').addEventListener('submit', async (e) => {
