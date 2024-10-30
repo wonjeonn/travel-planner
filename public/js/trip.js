@@ -10,22 +10,52 @@ if (tripId) {
 
 const createListItem = (itemText, section, saveFunction) => {
     const itemDiv = document.createElement('div');
-    itemDiv.textContent = itemText;
+
+    const textNode = document.createElement('span');
+    textNode.textContent = itemText;
+    itemDiv.appendChild(textNode);
+
+    const editButton = document.createElement('button');
+    editButton.textContent = 'Edit';
+    editButton.onclick = () => {
+        const newText = prompt("Edit item:", itemText);
+        if (newText !== null && newText.trim() !== "") {
+            textNode.textContent = newText;
+            saveFunction();
+        }
+    };
+    itemDiv.appendChild(editButton);
+    
     const removeButton = document.createElement('button');
-    removeButton.textContent = 'remove';
+    removeButton.textContent = 'Remove';
     removeButton.onclick = async () => {
         itemDiv.remove();
         await saveFunction();
     };
     itemDiv.appendChild(removeButton);
+    
     return itemDiv;
 };
 
 const createExpenseItem = (text, amount, saveFunction) => {
     const expenseDiv = document.createElement('div');
     expenseDiv.textContent = `${text}: $${amount}`;
+    
+    const editButton = document.createElement('button');
+    editButton.textContent = 'Edit';
+    editButton.onclick = () => {
+        const newText = prompt("Edit expense description:", text);
+        const newAmount = prompt("Edit expense amount:", amount);
+        if (newText !== null && newText.trim() !== "" && !isNaN(newAmount)) {
+            expenseDiv.textContent = `${newText}: $${parseFloat(newAmount).toFixed(2)}`;
+            saveFunction();
+            updateTotalExpenses();
+        }
+    };
+    expenseDiv.appendChild(editButton);
+
     const removeButton = document.createElement('button');
-    removeButton.textContent = 'remove';
+    removeButton.textContent = 'Remove';
     removeButton.onclick = async () => {
         expenseDiv.remove();
         await saveFunction();
@@ -50,13 +80,33 @@ const updateTotalExpenses = () => {
 const createItineraryRow = (type, name, date, status, saveFunction) => {
     const row = document.createElement('tr');
     row.innerHTML = `<td>${type}</td><td>${name}</td><td>${date}</td><td>${status}</td>`;
+    
+    const editButton = document.createElement('button');
+    editButton.textContent = 'Edit';
+    editButton.onclick = () => {
+        const newType = prompt("Edit type:", type);
+        const newName = prompt("Edit name:", name);
+        const newDate = prompt("Edit date:", date);
+        const newStatus = prompt("Edit status:", status);
+        if (newType && newName && newDate && newStatus) {
+            row.children[0].textContent = newType;
+            row.children[1].textContent = newName;
+            row.children[2].textContent = newDate;
+            row.children[3].textContent = newStatus;
+            saveFunction();
+        }
+    };
+    
+    const actionCell = document.createElement('td');
+    actionCell.appendChild(editButton);
+    
     const removeButton = document.createElement('button');
-    removeButton.textContent = 'remove';
+    removeButton.textContent = 'Remove';
     removeButton.onclick = async () => {
         row.remove();
         await saveFunction();
     };
-    const actionCell = document.createElement('td');
+    
     actionCell.appendChild(removeButton);
     row.appendChild(actionCell);
     return row;
@@ -69,6 +119,8 @@ const loadTripDetails = async () => {
         const res = await fetch(`/api/trips/${tripId}`);
         if (res.ok) {
             const trip = await res.json();
+
+            document.getElementById('trip-title').textContent = trip.name;
 
             const packingBoxes = document.getElementById('packing-boxes');
             packingBoxes.innerHTML = '';
@@ -174,6 +226,33 @@ const saveItinerary = async (tripId) => {
 const goHome = () => {
     window.location.href = '/';
 };
+const changeTripName = async () => {
+    const newName = prompt("Enter the new trip name:");
+    if (newName && newName.trim() !== "") {
+        try {
+            const response = await fetch(`/api/trips/${tripId}/name`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ name: newName }),
+            });
+
+            if (response.ok) {
+                document.getElementById('trip-title').textContent = newName;
+                alert('Trip name changed successfully!');
+            } else {
+                const errorResponse = await response.json();
+                alert(`Error changing trip name: ${errorResponse.message}`);
+            }
+        } catch (error) {
+            console.error('error changing trip name:', error);
+            alert('Failed to change the trip name. Please try again later.');
+        }
+    } else {
+        alert('Trip name cannot be empty.');
+    }
+};
 
 const deleteTrip = async () => {
     try {
@@ -258,7 +337,7 @@ document.getElementById('itinerary-form').addEventListener('submit', async (e) =
 });
 
 document.getElementById('home-button').addEventListener('click', goHome);
-
+document.getElementById('edit-trip-name-button').addEventListener('click', changeTripName);
 document.getElementById('delete-trip-button').addEventListener('click', deleteTrip);
 
 window.onload = loadTripDetails;

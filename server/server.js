@@ -20,6 +20,7 @@ app.use(express.static(path.join(__dirname, '../public')));
 app.post('/api/trips', tripController.createTrip);
 app.get('/api/trips', tripController.getTrips);
 app.get('/api/trips/:id', tripController.getTripById);
+app.put('/api/trips/:id/name', tripController.updateTripName);
 app.delete('/api/trips/:id', tripController.deleteTrip);
 app.put('/api/trips/:id/packing', tripController.updatePackingList);
 app.put('/api/trips/:id/checklist', tripController.updateChecklist);

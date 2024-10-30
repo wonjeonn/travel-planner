@@ -51,6 +51,26 @@ const getTripById = async (req, res) => {
     }
 };
 
+const updateTripName = async (req, res) => {
+    const { name } = req.body;
+
+    try {
+        const updatedTrip = await Trip.findByIdAndUpdate(
+            req.params.id,
+            { name },
+            { new: true, runValidators: true }
+        );
+
+        if (!updatedTrip) {
+            return res.status(404).json({ message: 'trip not found' });
+        }
+        res.status(200).json(updatedTrip);
+    } catch (error) {
+        console.error('error updating trip name:', error);
+        res.status(500).json({ message: 'error updating trip name', error });
+    }
+};
+
 const deleteTrip = async (req, res) => {
     try {
         const tripId = req.params.id;
@@ -159,6 +179,7 @@ module.exports = {
     createTrip,
     getTrips,
     getTripById,
+    updateTripName,
     deleteTrip,
     updatePackingList,
     updateChecklist,
