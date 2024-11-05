@@ -7,6 +7,7 @@ const createTrip = async (req, res) => {
         type: item.type,
         name: item.name,
         date: new Date(item.date),
+        time: item.time,
         status: item.status
     }));
 

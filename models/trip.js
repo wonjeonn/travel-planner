@@ -4,6 +4,7 @@ const itinerarySchema = new mongoose.Schema({
     type: { type: String, required: true },
     name: { type: String, required: true },
     date: { type: Date, required: true },
+    time: { type: String, required: true },
     status: { type: String, required: true }
 });
 

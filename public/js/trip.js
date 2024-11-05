@@ -77,26 +77,31 @@ const updateTotalExpenses = () => {
     document.getElementById('total-expenses').textContent = total.toFixed(2);
 };
 
-const createItineraryRow = (type, name, date, status, saveFunction) => {
+const createItineraryRow = (type, name, date, time, status, saveFunction) => {
     const row = document.createElement('tr');
-    row.innerHTML = `<td>${type}</td><td>${name}</td><td>${date}</td><td>${status}</td>`;
+    
+    const formattedDate = new Date(date).toISOString().split('T')[0];
+    
+    row.innerHTML = `<td>${type}</td><td>${name}</td><td>${formattedDate}</td><td>${time}</td><td>${status}</td>`;
     
     const editButton = document.createElement('button');
     editButton.textContent = 'Edit';
     editButton.onclick = () => {
         const newType = prompt("Edit type:", type);
         const newName = prompt("Edit name:", name);
-        const newDate = prompt("Edit date:", date);
+        const newDate = prompt("Edit date:", formattedDate);
+        const newTime = prompt("Edit time:", time);
         const newStatus = prompt("Edit status:", status);
-        if (newType && newName && newDate && newStatus) {
+        if (newType && newName && newDate && newTime && newStatus) {
             row.children[0].textContent = newType;
             row.children[1].textContent = newName;
             row.children[2].textContent = newDate;
-            row.children[3].textContent = newStatus;
+            row.children[3].textContent = newTime;
+            row.children[4].textContent = newStatus;
             saveFunction();
         }
     };
-    
+
     const actionCell = document.createElement('td');
     actionCell.appendChild(editButton);
     
@@ -157,7 +162,7 @@ const loadTripDetails = async () => {
             const itineraryTableBody = document.getElementById('itinerary-body');
             itineraryTableBody.innerHTML = '';
             trip.itinerary.forEach(item => {
-                const row = createItineraryRow(item.type, item.name, item.date, item.status, () => saveItinerary(tripId));
+                const row = createItineraryRow(item.type, item.name, item.date, item.time, item.status, () => saveItinerary(tripId));
                 itineraryTableBody.appendChild(row);
             });
         }
@@ -213,7 +218,8 @@ const saveItinerary = async (tripId) => {
             type: cells[0].textContent,
             name: cells[1].textContent,
             date: cells[2].textContent,
-            status: cells[3].textContent,
+            time: cells[3].textContent,
+            status: cells[4].textContent,
         };
     });
     await fetch(`/api/trips/${tripId}/itinerary`, {
@@ -226,6 +232,7 @@ const saveItinerary = async (tripId) => {
 const goHome = () => {
     window.location.href = '/';
 };
+
 const changeTripName = async () => {
     const newName = prompt("Enter the new trip name:");
     if (newName && newName.trim() !== "") {
@@ -328,10 +335,17 @@ document.getElementById('itinerary-form').addEventListener('submit', async (e) =
     const type = document.getElementById('activity-type').value;
     const name = document.getElementById('activity-name').value;
     const date = document.getElementById('activity-date').value;
+    const time = document.getElementById('activity-time').value;
     const status = document.getElementById('activity-status').value;
 
-    const row = createItineraryRow(type, name, date, status, () => saveItinerary(tripId));
+    const row = createItineraryRow(type, name, date, time, status, () => saveItinerary(tripId));
     document.getElementById('itinerary-body').appendChild(row);
+
+    document.getElementById('activity-type').value = '';
+    document.getElementById('activity-name').value = '';
+    document.getElementById('activity-date').value = '';
+    document.getElementById('activity-time').value = '';
+    document.getElementById('activity-status').value = '';
 
     await saveItinerary(tripId);
 });
