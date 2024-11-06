@@ -1,12 +1,14 @@
 body {
     font-family: Arial, Helvetica, sans-serif;
-    background-color: #f7f0f9;
-    color: #35495e;
+    background-color: #f7f8fa;
+    color: #4a6a75;
+    margin: 20px;
+    padding: 0;
 }
 
 h1,
 h2 {
-    color: #35495e;
+    color: #4a6a75;
 }
 
 form {
@@ -15,52 +17,71 @@ form {
 
 #main {
     display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    flex-wrap: wrap;
 }
 
 #left-side {
     flex: 3;
-    padding: 10px;
-    background-color: #e0f7fa;
-    border-radius: 8px;
+    padding: 15px;
+    background-color: #eff6fd;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 #right-side {
     flex: 7;
-    padding: 10px;
-    background-color: #fce4ec;
-    border-radius: 8px;
+    padding: 15px;
+    background-color: #fafdff;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 input[type="text"],
 input[type="number"],
 input[type="date"],
 select {
-    padding: 10px;
-    border: 1px solid #b2ebf2;
-    border-radius: 4px;
+    padding: 8px;
+    border: 1px solid #c8e0f7;
+    border-radius: 8px;
     background-color: #ffffff;
+    transition: background-color 0.3s ease-in-out;
+    font-size: 0.85rem;
+}
+
+input[type="text"]:focus,
+input[type="number"]:focus,
+input[type="date"]:focus,
+select:focus {
+    background-color: #f1f9ff;
+    outline: none;
+    border-color: #a3c8f0;
 }
 
 button {
     padding: 10px;
-    background-color: #ffccbc;
-    color: #35495e;
+    background-color: #ffefdc;
+    color: #4a6a75;
     border: none;
-    border-radius: 4px;
+    border-radius: 8px;
     cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+    font-size: 0.9rem;
 }
 
 button:hover {
-    background-color: #ffab91;
+    background-color: #ffdbab;
 }
 
 div,
 table {
-    margin-top: 10px;
+    margin-top: 15px;
     padding: 10px;
-    border: 1px solid #e0f2f1;
-    border-radius: 4px;
+    border: 1px solid #e1f0f8;
+    border-radius: 8px;
     background-color: #ffffff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
 }
 
 table {
@@ -71,7 +92,70 @@ table {
 
 th,
 td {
-    padding: 10px;
-    border-bottom: 1px solid #b2ebf2;
-    color: #35495e;
+    padding: 6px;
+    border-bottom: 1px solid #c8e0f7;
+    color: #4a6a75;
+}
+
+th {
+    background-color: #f4f9ff;
+}
+
+tr:hover {
+    background-color: #f1f9ff;
+}
+
+@media (max-width: 768px) {
+    #main {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    #left-side,
+    #right-side {
+        flex: none;
+        width: 95%;
+        margin: 0 0 10px 0;
+        padding: 10px;
+    }
+
+    button {
+        width: auto;
+        padding: 8px 12px;
+        font-size: 0.8rem;
+        max-width: 150px;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    input[type="date"],
+    select {
+        width: 100%;
+        padding: 8px;
+        margin-bottom: 8px;
+        font-size: 0.8rem;
+    }
+
+    table {
+        width: 100%;
+        font-size: 0.8rem;
+    }
+
+    th,
+    td {
+        padding: 6px;
+    }
+
+    h1 {
+        font-size: 1.3rem;
+    }
+
+    h2 {
+        font-size: 1.1rem;
+    }
+
+    label,
+    div {
+        font-size: 0.8rem;
+    }
 }
